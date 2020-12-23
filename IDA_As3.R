@@ -1,6 +1,6 @@
 library(mice)
 library(JointAI)
-
+##1(a)
 md_pattern(nhanes, pattern = FALSE, color = c('#34111b', '#e30f41'))
 nrow(nhanes)
 
@@ -11,6 +11,8 @@ fit =  with(imp, lm(bmi ~ age + hyp + chl))
 pooled_ests = pool(fit)
 pooled_ests
 
+
+##1(b)
 ests_seed2 <- pool(with(mice(nhanes, printFlag = FALSE, seed = 2), lm(bmi ~ age + hyp + chl)))
 ests_seed3 <- pool(with(mice(nhanes, printFlag = FALSE, seed = 3), lm(bmi ~ age + hyp + chl)))
 ests_seed4 <- pool(with(mice(nhanes, printFlag = FALSE, seed = 4), lm(bmi ~ age + hyp + chl)))
@@ -33,6 +35,8 @@ lambda = data.frame(seed1,
                     row.names = c('beta0', 'beta1', 'beta2', 'beta3'))
 lambda
 
+
+##1(c)
 ests_seed1_100 <- pool(with(mice(nhanes, printFlag = FALSE, seed = 1, m = 100), lm(bmi ~ age + hyp + chl)))
 ests_seed2_100 <- pool(with(mice(nhanes, printFlag = FALSE, seed = 2, m = 100), lm(bmi ~ age + hyp + chl)))
 ests_seed3_100 <- pool(with(mice(nhanes, printFlag = FALSE, seed = 3, m = 100), lm(bmi ~ age + hyp + chl)))
@@ -56,12 +60,16 @@ lambda_100 = data.frame(seed1_100,
                         row.names = c('beta0', 'beta1', 'beta2', 'beta3'))
 lambda_100
 
+
+##1(d)
 summary(pooled_ests); summary(ests_seed1_100)
 summary(ests_seed2); summary(ests_seed2_100)
 summary(ests_seed3); summary(ests_seed3_100)
 
 
 
+
+##2
 data2 = dataex2
 
 por_ci = function(data, seed){
@@ -120,6 +128,8 @@ boxplot(len, names = c("S.Regression", "Bootstrap"))
 
 
 
+
+##4(a)
 data4 = dataex4
 
 imps = mice(data4, m = 50, printFlag = FALSE, seed = 1)
@@ -129,6 +139,7 @@ plot(imps, layout = c(2,2))
 summary(ests, conf.int = TRUE)[, c(7,8)]
 
 
+##4(b)
 x12 = data4$x1*data4$x2
 data4.new = cbind(data4, x12)
 
@@ -148,6 +159,8 @@ ci95 = summary(ests, conf.int = TRUE)[, c(7,8)]
 rownames(ci95) = c('beta0','beta1','beta2','beta3')
 ci95
 
+
+##4(c)
 imp = mice(data4.new, m = 50, seed = 1, printFlag = FALSE)
 fits = with(imp, lm(y ~ x1 + x2 + x12))
 ests = pool(fits)
@@ -157,7 +170,7 @@ rownames(ci95) = c('beta0','beta1','beta2','beta3')
 ci95
 
 
-
+##5
 data5 = NHANES2
 md_pattern(data5, pattern = FALSE, color = c('#34111b', '#e30f41'))
 
